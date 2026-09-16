@@ -1,0 +1,234 @@
+/* Shared colors and spacing keep the design easy to adjust. */
+:root {
+  color-scheme: light;
+  --page-background: #f5f4ef;
+  --surface: #ffffff;
+  --text: #243c35;
+  --muted: #596b64;
+  --accent: #27634e;
+  --border: #d5ddd5;
+  --soft-background: #f0f4ef;
+  --radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--page-background);
+  color: var(--text);
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+.page {
+  width: min(100% - 40px, 960px);
+  margin: 0 auto;
+  padding: 56px 0 24px;
+}
+
+.eyebrow {
+  margin: 0 0 18px;
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2.25rem, 6vw, 3.5rem);
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+}
+
+.introduction {
+  margin: 20px 0 32px;
+  color: var(--muted);
+}
+
+.practice-card {
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+}
+
+.practice-header,
+.practice-footer,
+.actions,
+.statistics {
+  display: flex;
+  gap: 24px;
+}
+
+.practice-header,
+.practice-footer {
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.practice-header p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.duration-control label,
+.typing-label,
+h3 {
+  display: block;
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+select,
+textarea,
+button {
+  font: inherit;
+  border-radius: var(--radius);
+}
+
+select {
+  min-height: 44px;
+  padding: 8px 36px 8px 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.statistics {
+  margin: 28px 0;
+  padding: 20px;
+  border-radius: var(--radius);
+  background: var(--soft-background);
+  flex-wrap: wrap;
+}
+
+.statistic {
+  flex: 1 1 140px;
+}
+
+.statistic dt {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.statistic dd {
+  margin: 4px 0 0;
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.statistic dd span {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.sample-text {
+  margin: 0 0 24px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: ui-monospace, monospace;
+  font-size: 1.05rem;
+  line-height: 1.9;
+}
+
+textarea {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  resize: vertical;
+  border: 1px solid var(--border);
+  background: #fafbf9;
+  color: var(--text);
+}
+
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.practice-footer {
+  margin-top: 20px;
+  gap: 16px;
+}
+
+.preview-note {
+  flex: 1 1 240px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.actions {
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+button {
+  min-height: 44px;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.button-primary {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: white;
+}
+
+.button-secondary {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+:disabled {
+  cursor: not-allowed;
+}
+
+.page-footer {
+  padding: 24px 0;
+  color: var(--muted);
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+/* Narrow screens use the same layout with smaller outer spacing. */
+@media (max-width: 600px) {
+  .page {
+    width: calc(100% - 24px);
+    padding-top: 32px;
+  }
+
+  .practice-card {
+    padding: 20px;
+  }
+
+  .statistics {
+    gap: 16px;
+  }
+
+  .statistic {
+    flex-basis: 100px;
+  }
+}

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Typer — Typing practice</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="page">
+      <header class="page-header">
+        <p class="eyebrow">TYPER / TYPING PRACTICE</p>
+        <h1>A little practice.<br>A little faster.</h1>
+        <p class="introduction">Build your typing speed and accuracy, one short session at a time.</p>
+      </header>
+
+      <section class="practice-card" aria-labelledby="practice-title">
+        <div class="practice-header">
+          <div>
+            <h2 id="practice-title">Your next practice</h2>
+            <p>Choose a duration, then type the passage below.</p>
+          </div>
+          <div class="duration-control">
+            <label for="duration">Test duration</label>
+            <select id="duration" name="duration">
+              <option value="15">15 seconds</option>
+              <option value="30">30 seconds</option>
+              <option value="60" selected>60 seconds</option>
+              <option value="120">120 seconds</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Static placeholders: timing and scoring arrive in phase 3. -->
+        <dl class="statistics" aria-label="Test statistics">
+          <div class="statistic">
+            <dt>Time remaining</dt>
+            <dd>— <span>sec</span></dd>
+          </div>
+          <div class="statistic">
+            <dt>Typing speed</dt>
+            <dd>— <span>WPM</span></dd>
+          </div>
+          <div class="statistic">
+            <dt>Accuracy</dt>
+            <dd>— <span>%</span></dd>
+          </div>
+        </dl>
+
+        <h3 id="passage-title">Practice passage</h3>
+        <p class="sample-text" aria-labelledby="passage-title">Small steps make a difference. Take a breath, find a comfortable rhythm, and focus on each word. With a little practice every day, your fingers will move more easily across the keys. Speed will follow as your confidence grows.</p>
+
+        <label class="typing-label" for="typing-input">Your typing</label>
+        <textarea id="typing-input" rows="4" placeholder="Your typing will appear here…" aria-describedby="preview-note" disabled></textarea>
+
+        <div class="practice-footer">
+          <p id="preview-note" class="preview-note">UI preview · Typing, timing, and results will be added in the next phases.</p>
+          <div class="actions">
+            <button class="button-primary" type="button" disabled>Restart test</button>
+            <button class="button-secondary" type="button" disabled>New passage</button>
+          </div>
+        </div>
+      </section>
+
+      <footer class="page-footer">Find your rhythm. Aim for accuracy. Let speed follow.</footer>
+    </main>
+  </body>
+</html>
