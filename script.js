@@ -1,6 +1,7 @@
 const sampleText = document.querySelector('#sample-text');
 const typingInput = document.querySelector('#typing-input');
 const typingProgress = document.querySelector('#typing-progress');
+const testStatus = document.querySelector('#test-status');
 const durationSelect = document.querySelector('#duration');
 const timeRemaining = document.querySelector('#time-remaining');
 const typingSpeed = document.querySelector('#typing-speed');
@@ -83,7 +84,10 @@ function finishTest() {
   clearInterval(timerId);
   timeRemaining.textContent = '0';
   typingInput.readOnly = true;
+  // Discard any uncommitted text from an input method at the deadline.
+  typingInput.value = acceptedInput;
   updateTypingFeedback();
+  testStatus.textContent = typingProgress.textContent;
 }
 
 function updateTimer() {
@@ -97,7 +101,7 @@ function updateTimer() {
   }
 }
 
-function handleInput() {
+function handleInput(event) {
   // Reject late input even if the next timer callback has not run yet.
   if (state === 'finished' || (state === 'running' && Date.now() >= deadline)) {
     typingInput.value = acceptedInput;
@@ -105,15 +109,18 @@ function handleInput() {
     return;
   }
 
-  acceptedInput = typingInput.value;
-  if (state === 'ready' && acceptedInput.length > 0) {
+  if (state === 'ready' && typingInput.value.length > 0) {
     state = 'running';
     durationSeconds = Number(durationSelect.value);
     deadline = Date.now() + durationSeconds * 1000;
     durationSelect.disabled = true;
+    testStatus.textContent = `Test started. ${durationSeconds} seconds. Results will be announced when time runs out.`;
     timerId = setInterval(updateTimer, 100);
     updateTimer();
   }
+  // Composition text is provisional until the input method commits it.
+  if (event && event.isComposing) return;
+  acceptedInput = typingInput.value;
   updateTypingFeedback();
 }
 
@@ -137,6 +144,7 @@ function resetTest() {
   appendPassage();
   sampleText.scrollTop = 0;
   updateTypingFeedback();
+  testStatus.textContent = `Passage ${passageIndex + 1} of ${passages.length}. Ready for a ${durationSeconds}-second test. Type to start.`;
 }
 
 restartButton.addEventListener('click', () => {
@@ -161,8 +169,12 @@ durationSelect.addEventListener('change', () => {
 
 // Input handles typing, deletion, pasted text, and edits in the middle.
 typingInput.addEventListener('input', handleInput);
+typingInput.addEventListener('compositionend', handleInput);
 document.addEventListener('visibilitychange', () => {
   if (state === 'running') updateTimer();
 });
 
 resetTest();
+typingInput.disabled = false;
+restartButton.disabled = false;
+newPassageButton.disabled = false;

@@ -8,7 +8,7 @@ with HTML, plain CSS, and vanilla JavaScript.
 Open `index.html` directly in a browser. No installation, build step, or server is
 required.
 
-## Phase 4: repeat practice
+## Phase 5: polished typing practice
 
 The current page supports fixed-duration typing tests:
 
@@ -28,6 +28,14 @@ The current page supports fixed-duration typing tests:
 - New passage cycles through four built-in texts and clears the current attempt
   while retaining the duration.
 - Responsive layout with labeled controls and keyboard focus styling.
+- Keyboard-scrollable passage panel and full-width action buttons on narrow
+  screens. Text input retains the normal text cursor.
+- A separate screen-reader status announces readiness, test start, and results;
+  per-character feedback stays available visually without live announcements.
+- Composing text with an input method starts the clock but only committed text
+  is scored. Uncommitted composition is discarded at expiry.
+- A JavaScript-disabled message explains why typing and action buttons are
+  unavailable when scripting is turned off.
 
 Both buttons work before, during, and after a test. They stop any active timer,
 clear input, feedback, and results, unlock duration selection, and focus the
@@ -63,10 +71,11 @@ to check the deadline. There are no dependencies or build tools.
    during a test, count down, stop input at expiry, and calculate WPM and accuracy.
    Supply enough text to continue for the selected duration.
 4. **Repeat practice** — complete: restart while retaining the duration and load new text.
-5. **Polish** — refine responsiveness, accessibility, and edge cases.
+5. **Polish** — complete: responsive controls, keyboard passage scrolling,
+   milestone announcements, composition handling, and browser checks.
 
 Each phase is reviewed before proceeding to the next and can be committed
-separately. Suggested phase 4 commit: `feat: add restart and passage selection`.
+separately. Suggested phase 5 commit: `feat: polish responsive layout and accessibility`.
 
 ## Manual preview checks
 
@@ -95,12 +104,31 @@ separately. Suggested phase 4 commit: `feat: add restart and passage selection`.
   changes, the attempt clears, and duration stays selected. Cycle through all
   four passages, then confirm restarting retains the current passage.
 - Activate both buttons with the keyboard and confirm focus returns to typing.
+- Tab to the passage and use arrow keys to scroll. Confirm focus outlines are
+  visible on the passage, duration selector, typing area, and buttons.
+- With a screen reader, check readiness, start, and result announcements. The
+  live region should not announce each character's progress or each timer tick.
+- Disable JavaScript and reload: instructions should explain how to enable the
+  test, and typing/action controls should remain disabled.
 
 ## Automated checks
 
 With Node.js installed, run `node --test tests/typing.test.cjs`. These tests use
 small DOM and clock stubs to check timing, corrections, scoring, empty input,
 late input, background delays, passage extension, restarting, and passage
-cycling without real-time waits.
+cycling, milestone announcements, text composition, and literal/Unicode input
+without real-time waits.
 They do not replace visual or browser interaction checks. Node.js is needed
 only for these checks; the application itself still runs directly in a browser.
+
+### Browser validation
+
+Phase 5 was checked in headless Chromium at viewport widths of 320, 375, 768,
+and 1280 pixels, including a scrollbar-aware horizontal overflow check. Mobile
+and desktop screenshots were visually reviewed. Browser interaction checks
+covered keyboard tab order, real text insertion, duration locking, expiry,
+results, restart focus, and passage switching. Expiry was simulated by advancing
+the page clock. No JavaScript exceptions were observed.
+
+Other browser engines, physical mobile keyboards, and actual screen-reader
+speech output have not been tested; the manual checks above cover those follow-ups.

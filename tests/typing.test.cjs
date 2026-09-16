@@ -14,7 +14,7 @@ function setup() {
   let tick;
   const elements = {};
   for (const id of ['sample-text', 'typing-input', 'typing-progress', 'duration',
-    'time-remaining', 'typing-speed', 'typing-accuracy', 'restart-test', 'new-passage']) {
+    'time-remaining', 'typing-speed', 'typing-accuracy', 'restart-test', 'new-passage', 'test-status']) {
     elements[id] = {
       textContent: '', value: '', disabled: false, readOnly: false,
       children: [], clientHeight: 220, events: {},
@@ -39,7 +39,10 @@ function setup() {
   });
   return {
     elements,
-    type(value) { elements['typing-input'].value = value; elements['typing-input'].events.input(); },
+    type(value, isComposing = false) {
+      elements['typing-input'].value = value;
+      elements['typing-input'].events.input({ isComposing });
+    },
     select(value) { elements.duration.value = String(value); elements.duration.events.change(); },
     advance(ms, runTimer = true) { now += ms; if (runTimer && tick) tick(); },
     returnToTab() { documentEvents.visibilitychange(); },
@@ -198,4 +201,40 @@ test('new passage cycles distinct texts and restart retains the current passage'
   assert.equal(currentPassage(), passage);
   assert.equal(app.elements['typing-speed'].textContent, '—');
   assert.equal(app.elements['typing-input'].readOnly, false);
+});
+
+test('announces milestones without announcing every keystroke', () => {
+  const app = setup();
+  assert.match(app.elements['test-status'].textContent, /Ready/);
+  app.type('S');
+  const announcement = app.elements['test-status'].textContent;
+  assert.match(announcement, /Test started/);
+  app.type('Small');
+  assert.equal(app.elements['test-status'].textContent, announcement);
+  app.advance(60000);
+  assert.match(app.elements['test-status'].textContent, /Time is up!.*100% accuracy/);
+});
+
+test('composition starts timing but only committed text contributes to results', () => {
+  const app = setup();
+  app.type('S', true);
+  assert.equal(app.hasTimer(), true);
+  app.elements['typing-input'].events.compositionend();
+  assert.equal(app.elements['sample-text'].children[0].className, 'character-correct');
+  app.type('Small', true);
+  app.advance(60000);
+  assert.equal(app.elements['typing-input'].value, 'S');
+  assert.match(app.elements['typing-progress'].textContent, /1 characters correct/);
+  app.type('Small');
+  assert.equal(app.elements['typing-input'].value, 'S');
+});
+
+test('literal markup and Unicode input remain text and count as mistakes', () => {
+  const app = setup();
+  app.type('<img>😀');
+  assert.match(app.elements['typing-progress'].textContent, /6 mistakes/);
+  assert(app.elements['sample-text'].children.every(span => span.textContent.length === 1));
+  app.advance(60000);
+  assert.equal(app.elements['typing-speed'].textContent, '0');
+  assert.equal(app.elements['typing-accuracy'].textContent, '0');
 });

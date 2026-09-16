@@ -48,18 +48,20 @@
         </dl>
 
         <h3 id="passage-title">Practice passage</h3>
-        <p id="sample-text" class="sample-text" aria-labelledby="passage-title">Small steps make a difference. Take a breath, find a comfortable rhythm, and focus on each word. With a little practice every day, your fingers will move more easily across the keys. Speed will follow as your confidence grows.</p>
+        <p id="sample-text" class="sample-text" role="region" tabindex="0" aria-labelledby="passage-title">Small steps make a difference. Take a breath, find a comfortable rhythm, and focus on each word. With a little practice every day, your fingers will move more easily across the keys. Speed will follow as your confidence grows.</p>
 
         <label class="typing-label" for="typing-input">Your typing</label>
         <p id="typing-help" class="typing-help">Correct characters turn green. Mistakes are shaded and underlined. The next character has a dark underline. Use Backspace to correct mistakes.</p>
-        <textarea id="typing-input" rows="4" placeholder="Start typing the passage here…" aria-describedby="typing-help typing-progress preview-note" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea>
-        <p id="typing-progress" class="typing-progress" role="status" aria-live="polite" aria-atomic="true"></p>
+        <textarea id="typing-input" rows="4" placeholder="Start typing the passage here…" aria-describedby="typing-help preview-note" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" disabled></textarea>
+        <p id="typing-progress" class="typing-progress"></p>
+        <p id="test-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></p>
+        <noscript><p>Enable JavaScript in your browser to use the typing test.</p></noscript>
 
         <div class="practice-footer">
           <p id="preview-note" class="preview-note">Results appear when time runs out. Corrected mistakes do not reduce accuracy. Restart or choose a new passage anytime to clear this attempt and keep your duration.</p>
           <div class="actions">
-            <button id="restart-test" class="button-primary" type="button">Restart test</button>
-            <button id="new-passage" class="button-secondary" type="button">New passage</button>
+            <button id="restart-test" class="button-primary" type="button" disabled>Restart test</button>
+            <button id="new-passage" class="button-secondary" type="button" disabled>New passage</button>
           </div>
         </div>
       </section>
