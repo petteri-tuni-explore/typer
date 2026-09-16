@@ -142,6 +142,9 @@ select {
 }
 
 .sample-text {
+  position: relative;
+  max-height: 220px;
+  overflow-y: auto;
   margin: 0 0 24px;
   padding: 20px;
   border: 1px solid var(--border);
@@ -159,6 +162,10 @@ textarea {
   border: 1px solid var(--border);
   background: #fafbf9;
   color: var(--text);
+}
+
+.statistic dd strong {
+  font-weight: inherit;
 }
 
 .character-correct {
