@@ -8,7 +8,7 @@ with HTML, plain CSS, and vanilla JavaScript.
 Open `index.html` directly in a browser. No installation, build step, or server is
 required.
 
-## Phase 3: timing and results
+## Phase 4: repeat practice
 
 The current page supports fixed-duration typing tests:
 
@@ -24,11 +24,15 @@ The current page supports fixed-duration typing tests:
 - The passage repeats automatically, with a separating space, to keep text
   available until time runs out. The passage panel follows typing progress.
 - Input becomes read-only at expiry and final WPM and accuracy are displayed.
-- Disabled restart and new-passage buttons.
+- Restart clears the current attempt while retaining the passage and duration.
+- New passage cycles through four built-in texts and clears the current attempt
+  while retaining the duration.
 - Responsive layout with labeled controls and keyboard focus styling.
 
-Reload the page to try again. Restart and new-passage buttons arrive in phase 4.
-The duration selector stays locked after completion until the page is reloaded.
+Both buttons work before, during, and after a test. They stop any active timer,
+clear input, feedback, and results, unlock duration selection, and focus the
+typing area. The next countdown starts only when typing begins again.
+The duration selector stays locked after completion until either button is used.
 
 ### Scoring
 
@@ -58,11 +62,11 @@ to check the deadline. There are no dependencies or build tools.
 3. **Timing and results** — complete: start on the first typed character, lock duration
    during a test, count down, stop input at expiry, and calculate WPM and accuracy.
    Supply enough text to continue for the selected duration.
-4. **Repeat practice** — restart while retaining the duration and load new text.
+4. **Repeat practice** — complete: restart while retaining the duration and load new text.
 5. **Polish** — refine responsiveness, accessibility, and edge cases.
 
 Each phase is reviewed before proceeding to the next and can be committed
-separately. Suggested phase 3 commit: `feat: add timed tests and typing results`.
+separately. Suggested phase 4 commit: `feat: add restart and passage selection`.
 
 ## Manual preview checks
 
@@ -74,22 +78,29 @@ separately. Suggested phase 3 commit: `feat: add timed tests and typing results`
 - Type an incorrect character: the matching passage position should be red and
   underlined, and the mistake count should increase. Delete or correct it and
   confirm the feedback updates, including edits in the middle of the input.
-- Select 15 seconds. Confirm selecting or focusing alone does not start the test.
+- Restart, then select 15 seconds. Confirm selecting or focusing alone does not
+  start the test.
 - Begin typing: duration selection should lock and the countdown should start.
 - Clear the input and confirm the first character is marked as next again while
   the countdown keeps running.
 - Reach the end of the original passage: more text should be available and the
   countdown should continue.
 - At expiry, confirm the input becomes read-only, remaining time is zero, and
-  final WPM and accuracy appear. Reload to try another duration.
+  final WPM and accuracy appear. Restart to try another duration.
 - Start a test, switch tabs until its duration has elapsed, and return; the test
   should show results without granting extra typing time.
-- Confirm action buttons remain disabled.
+- Restart during a test and after completion. Confirm input and results clear,
+  the same passage and duration remain, and the timer waits for typing.
+- Choose a new passage during a test and after completion. Confirm the passage
+  changes, the attempt clears, and duration stays selected. Cycle through all
+  four passages, then confirm restarting retains the current passage.
+- Activate both buttons with the keyboard and confirm focus returns to typing.
 
 ## Automated checks
 
 With Node.js installed, run `node --test tests/typing.test.cjs`. These tests use
 small DOM and clock stubs to check timing, corrections, scoring, empty input,
-late input, background delays, and passage extension without real-time waits.
+late input, background delays, passage extension, restarting, and passage
+cycling without real-time waits.
 They do not replace visual or browser interaction checks. Node.js is needed
 only for these checks; the application itself still runs directly in a browser.

@@ -5,7 +5,16 @@ const durationSelect = document.querySelector('#duration');
 const timeRemaining = document.querySelector('#time-remaining');
 const typingSpeed = document.querySelector('#typing-speed');
 const typingAccuracy = document.querySelector('#typing-accuracy');
-const passage = sampleText.textContent;
+const restartButton = document.querySelector('#restart-test');
+const newPassageButton = document.querySelector('#new-passage');
+const passages = [
+  sampleText.textContent,
+  'The morning light falls across the kitchen table. A cup of tea waits beside an open book, and the street outside is quiet. Before the day becomes busy, take a moment to notice the small things around you.',
+  'A path through the woods leads to a peaceful lake. Birds call from the branches as the wind moves through the leaves. Near the water, a wooden bench offers a place to rest and watch the clouds drift by.',
+  'Learning something new begins with a question. Try a simple idea, observe what happens, and make a small change. Each attempt teaches you a little more, and every useful mistake helps you decide what to try next.'
+];
+let passageIndex = 0;
+let passage = passages[passageIndex];
 
 const characters = [];
 let state = 'ready';
@@ -58,7 +67,7 @@ function updateTypingFeedback() {
       : Math.round((correctCount / typedCharacters.length) * 100);
     typingSpeed.textContent = String(wpm);
     typingAccuracy.textContent = String(accuracy);
-    typingProgress.textContent = `Time is up! ${wpm} WPM · ${accuracy}% accuracy · ${summary}. Reload to practice again.`;
+    typingProgress.textContent = `Time is up! ${wpm} WPM · ${accuracy}% accuracy · ${summary}. Restart or choose a new passage to practice again.`;
   } else {
     typingProgress.textContent = state === 'ready'
       ? 'Ready when you are. Type the first character to start.'
@@ -78,6 +87,7 @@ function finishTest() {
 }
 
 function updateTimer() {
+  if (state !== 'running') return;
   // An absolute deadline prevents delayed callbacks from extending the test.
   const millisecondsLeft = deadline - Date.now();
   if (millisecondsLeft <= 0) {
@@ -107,6 +117,41 @@ function handleInput() {
   updateTypingFeedback();
 }
 
+// Both practice actions return to ready without changing the chosen duration.
+function resetTest() {
+  clearInterval(timerId);
+  timerId = undefined;
+  state = 'ready';
+  deadline = 0;
+  acceptedInput = '';
+  durationSeconds = Number(durationSelect.value);
+  durationSelect.disabled = false;
+  typingInput.value = '';
+  typingInput.readOnly = false;
+  typingInput.scrollTop = 0;
+  timeRemaining.textContent = String(durationSeconds);
+  typingSpeed.textContent = '—';
+  typingAccuracy.textContent = '—';
+  characters.length = 0;
+  sampleText.replaceChildren();
+  appendPassage();
+  sampleText.scrollTop = 0;
+  updateTypingFeedback();
+}
+
+restartButton.addEventListener('click', () => {
+  resetTest();
+  typingInput.focus();
+});
+
+newPassageButton.addEventListener('click', () => {
+  // Cycle in order: every click gives a different passage, with no randomness.
+  passageIndex = (passageIndex + 1) % passages.length;
+  passage = passages[passageIndex];
+  resetTest();
+  typingInput.focus();
+});
+
 durationSelect.addEventListener('change', () => {
   if (state === 'ready') {
     durationSeconds = Number(durationSelect.value);
@@ -120,7 +165,4 @@ document.addEventListener('visibilitychange', () => {
   if (state === 'running') updateTimer();
 });
 
-sampleText.replaceChildren();
-appendPassage();
-timeRemaining.textContent = String(durationSeconds);
-updateTypingFeedback();
+resetTest();

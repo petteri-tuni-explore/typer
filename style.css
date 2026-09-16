@@ -94,6 +94,7 @@ h3 {
 select,
 textarea,
 button {
+  cursor: pointer;
   font: inherit;
   border-radius: var(--radius);
 }
