@@ -161,6 +161,29 @@ textarea {
   color: var(--text);
 }
 
+.character-correct {
+  color: #1b593e;
+  background: #e2f0e6;
+}
+
+.character-incorrect {
+  color: #932a2a;
+  background: #fce3e3;
+  text-decoration: underline wavy;
+  text-underline-offset: 4px;
+}
+
+.character-next {
+  border-bottom: 3px solid var(--text);
+}
+
+.typing-help,
+.typing-progress {
+  margin: 8px 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
 textarea::placeholder {
   color: var(--muted);
   opacity: 1;
